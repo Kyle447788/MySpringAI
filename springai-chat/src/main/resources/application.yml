@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+spring:
+  ai:
+    openai:
+      api-key: sk-6c0e3787ca9f4a339d93e4e217615eed
+      base-url: https://api.deepseek.com
+      chat:
+        options:
+          model: deepseek-v4-flash
+          temperature: 0.7
+          max-tokens: 2048
+      # 如果 DeepSeek 需要额外配置 headers，可以在这里设置
+      # 但通常 OpenAI 兼容模式无需额外配置
