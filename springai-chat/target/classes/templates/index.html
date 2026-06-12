@@ -156,6 +156,19 @@
         const messagesEl = document.getElementById('chatMessages');
         const inputField = document.getElementById('inputField');
         const sendBtn = document.getElementById('sendBtn');
+        const conversationId = getOrCreateConversationId();
+
+        loadHistory();
+
+        function getOrCreateConversationId() {
+            const key = 'chat-conversation-id';
+            const existing = localStorage.getItem(key);
+            if (existing) return existing;
+
+            const created = 'conv-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10);
+            localStorage.setItem(key, created);
+            return created;
+        }
 
         function autoResize(el) {
             el.style.height = 'auto';
@@ -188,6 +201,18 @@
             messagesEl.appendChild(div);
             messagesEl.scrollTop = messagesEl.scrollHeight;
             return div;
+        }
+
+        async function loadHistory() {
+            try {
+                const res = await fetch('/api/chat/history/' + encodeURIComponent(conversationId));
+                if (!res.ok) throw new Error((await res.text()) || '加载历史消息失败');
+
+                const messages = await res.json();
+                messages.forEach(item => addMessage(item.role, item.content));
+            } catch (err) {
+                showError(err.message);
+            }
         }
 
         function addLoadingMessage() {
@@ -224,7 +249,10 @@
                 const res = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: msg })
+                    body: JSON.stringify({
+                        conversationId: conversationId,
+                        message: msg
+                    })
                 });
                 if (!res.ok) throw new Error((await res.text()) || '请求失败');
                 const text = await res.text();
