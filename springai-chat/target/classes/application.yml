@@ -5,11 +5,11 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/chatmemory?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
     username: root
-    password: root
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
   ai:
     openai:
-      api-key: sk-6c0e3787ca9f4a339d93e4e217615eed
+      api-key: ${SPRING_AI_DEEPSEEK_API_KEY}
       base-url: https://api.deepseek.com
       chat:
         options:

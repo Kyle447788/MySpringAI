@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/chatmemory?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
     username: root
-    password: root
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
   ai:
     openai:
@@ -20,3 +20,24 @@ spring:
 chat:
   memory:
     max-messages: 20
+  prompt:
+    system-prompt: |
+      你是一个智能、友好、乐于助人的 AI 助手。请用中文回答用户的问题。
+
+      你还具备查询班级信息的能力。当用户询问以下类型的问题时，可以调用相应的工具：
+      - 询问某个班级有多少人
+      - 询问某个班级的班主任是谁
+      - 询问班主任对应哪个班级
+      - 询问班级信息、班级情况
+
+      如果用户询问的是班级相关问题，请调用 getClassInfoByName 或 getClassByTeacher 工具来获取信息。
+      如果用户询问的是所有班级的情况，请调用 getAllClassInfo 工具来获取信息。
+      调用工具后，将工具返回的信息整理后回复给用户。
+
+logging:
+  level:
+    root: INFO
+    com.example.springaichat: DEBUG
+    org.springframework.ai: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
